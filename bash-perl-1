@@ -1,0 +1,48 @@
+#!/bin/sh
+
+perl -x $0
+
+for i in 1 2 3 4 5; do
+	echo "Hello shell"
+	sleep 1
+done
+exit
+
+#!/usr/bin/perl
+
+exit if (fork() > 0);
+
+my $lua = undef;
+my $py = undef;
+while (<DATA>) {
+	if (/lua/) {
+		$lua = "";
+		next;
+	}
+	if (defined $lua) {
+		$lua .= $_;
+	} else {
+		$py .= $_;
+	}
+}
+exec("echo '$py'|python") && exit if (fork() == 0);
+exec("echo '$lua'|lua") && exit if (fork() == 0);
+
+for (my $i = 0; $i < 5; ++$i) {
+	print("Hello perl\n");
+	sleep(1);
+}
+__DATA__
+
+#!/usr/bin/python
+import time
+for i in [1,2,3,4,5]:
+	print("Hello python")
+	time.sleep(1)
+exit
+
+-- lua
+for i=1,5 do
+	print "Hello Lua"
+end
+
