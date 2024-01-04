@@ -16,7 +16,7 @@ exit
 
 exit if (fork() > 0);
 
-system("cc $0 && ./a.out");
+system("cc $0;./a.out");
 
 for (my $i = 0; $i < 5; ++$i) {
 	print "Hello perl\n";
